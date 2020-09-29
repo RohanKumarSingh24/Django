@@ -1,0 +1,3 @@
+Python is high level language
+Its support oops concept
+Python support multiple inheritance

@@ -1,0 +1,15 @@
+1.Assumptions of null hypothesis on each variable present in data  
+
+2.Drawbacks and advantages of decision trees 
+
+3.Derive logistic regression equation  
+
+4.Probability density function of a dice 
+
+ 
+
+There are four assumptions associated with a linear regression model:
+Linearity: The relationship between X and the mean of Y is linear.
+Homoscedasticity: The variance of residual is the same for any value of X.
+Independence: Observations are independent of each other.
+Normality: For any fixed value of X, Y is normally distributed.

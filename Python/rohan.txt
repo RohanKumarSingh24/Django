@@ -1,0 +1,67 @@
+Machine Learning — Text Processing
+Javaid Nabi
+Javaid Nabi
+Follow
+Sep 13, 2018 · 10 min read
+
+
+
+Text Processing is one of the most common task in many ML applications. Below are some examples of such applications.
+• Language Translation: Translation of a sentence from one language to another.
+• Sentiment Analysis: To determine, from a text corpus, whether the  sentiment towards any topic or product etc. is positive, negative, or neutral.
+• Spam Filtering:  Detect unsolicited and unwanted email/messages.
+Image for post
+Courtesy (sigmoidal)
+These applications deal with huge amount of text to perform classification or translation and involves a lot of work on the back end. Transforming text into something an algorithm can digest is a complicated process. In this article, we will discuss the steps involved in text processing.
+Step 1 : Data Preprocessing
+Tokenization — convert sentences to words
+Removing unnecessary punctuation, tags
+Removing stop words — frequent words such as ”the”, ”is”, etc. that do not have specific semantic
+Stemming — words are reduced to a root by removing inflection through dropping unnecessary characters, usually a suffix.
+Lemmatization — Another approach to remove inflection by determining the part of speech and utilizing detailed database of the language.
+The stemmed form of studies is: studi
+The stemmed form of studying is: study
+The lemmatized form of studies is: study
+The lemmatized form of studying is: study
+Thus stemming & lemmatization help reduce words like ‘studies’, ‘studying’ to a common base form or root word ‘study’. For detailed discussion on Stemming & Lemmatization refer here . Note that not all the steps are mandatory and is based on the application use case. For Spam Filtering we may follow all the above steps but may not for language translation problem.
+We can use python to do many text preprocessing operations.
+NLTK — The Natural Language ToolKit is one of the best-known and most-used NLP libraries, useful for all sorts of tasks from t tokenization, stemming, tagging, parsing, and beyond
+BeautifulSoup — Library for extracting data from HTML and XML documents
+#using NLTK library, we can do lot of text preprocesing
+import nltk
+from nltk.tokenize import word_tokenize
+#function to split text into word
+tokens = word_tokenize("The quick brown fox jumps over the lazy dog")
+nltk.download('stopwords')
+print(tokens)
+OUT: [‘The’, ‘quick’, ‘brown’, ‘fox’, ‘jumps’, ‘over’, ‘the’, ‘lazy’, ‘dog’]
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words(‘english’))
+tokens = [w for w in tokens if not w in stop_words]
+print(tokens)
+OUT: [‘The’, ‘quick’, ‘brown’, ‘fox’, ‘jumps’, ‘lazy’, ‘dog’]
+#NLTK provides several stemmer interfaces like Porter stemmer, #Lancaster Stemmer, Snowball Stemmer
+from nltk.stem.porter import PorterStemmer
+porter = PorterStemmer()
+stems = []
+for t in tokens:    
+    stems.append(porter.stem(t))
+print(stems)
+OUT: [‘the’, ‘quick’, ‘brown’, ‘fox’, ‘jump’, ‘lazi’, ‘dog’]
+Step 2: Feature Extraction
+In text processing, words of the text represent discrete, categorical features. How do we encode such data in a way which is ready to be used by the algorithms? The mapping from textual data to real valued vectors is called feature extraction. One of the simplest techniques to numerically represent text is Bag of Words.
+Bag of Words (BOW): We make the list of unique words in the text corpus called vocabulary. Then we can represent each sentence or document as a vector with each word represented as 1 for present and 0 for absent from the vocabulary. Another representation can be count the number of times each word appears in a document. The most popular approach is using the Term Frequency-Inverse Document Frequency (TF-IDF) technique.
+Term Frequency (TF) = (Number of times term t appears in a document)/(Number of terms in the document)
+Inverse Document Frequency (IDF) = log(N/n), where, N is the number of documents and n is the number of documents a term t has appeared in. The IDF of a rare word is high, whereas the IDF of a frequent word is likely to be low. Thus having the effect of highlighting words that are distinct.
+We calculate TF-IDF value of a term as = TF * IDF
+Let us take an example to calculate TF-IDF of a term in a document.
+Image for post
+Example text corpus
+TF('beautiful',Document1) = 2/10, IDF('beautiful')=log(2/2) = 0
+TF(‘day’,Document1) = 5/10,  IDF(‘day’)=log(2/1) = 0.30
+
+TF-IDF(‘beautiful’, Document1) = (2/10)*0 = 0
+TF-IDF(‘day’, Document1) = (5/10)*0.30 = 0.15
+As, you can see for Document1 , TF-IDF method heavily penalizes the word ‘beautiful’ but assigns greater weight to ‘day’. This is due to IDF part, which gives more weightage to the words that are distinct. In other words, ‘day’ is an important word for Document1 from the context of the entire corpus. Python scikit-learn library provides efficient tools for text data mining and provides functions to calculate TF-IDF of text vocabulary given a text corpus.
+One of the major disadvantages of using BOW is that it discards word order thereby ignoring the context and in turn meaning of words in the document. For natural language processing (NLP) maintaining the context of the words is of utmost importance. To solve this problem we use another approach called Word Embedding.
+Word Embedding: It is a representation of text where words that have the same meaning have a similar representation. In other words it represents words in a coordinate system where related words, based on a
